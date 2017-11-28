@@ -1,6 +1,6 @@
-<?php
 $config = [
-  "host" => "mysql:host;dbname=dbname",
+  "host" => "host",
+  "dbname"=>"dbname"
   "user" => "dbuser",
   "password" => "dbpassword",
 ];
