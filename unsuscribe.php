@@ -4,19 +4,20 @@ session_start();
 
 if(isset($_SESSION['user']) && !empty($_SESSION['user'])){
     $deleted_user = $_SESSION['user'];
-    echo($deleted_user);
-    $q = $pdo->prepare('DELETE * FROM user WHERE nickname = :nickname');
-    $q->bindParam(':nickname', $deleted_user, PDO::PARAM_STR);
-    $deleted = $q->execute();
-    var_dump($deleted);
+    //echo($deleted_user);
 
-    if($deleted){
+    $q = $pdo->prepare('DELETE FROM user WHERE nickname = :nickname');
+    $q->bindParam(':nickname', $deleted_user, PDO::PARAM_STR);
+    $q->execute();
+    $deleteResults = $q->execute();
+
+    if($deleteResults){
+    //echo ($deleted_user." vous avez été correctement désinscrit(e)");
     session_unset();
     session_destroy();
-    echo "Vous avez été correctement désinscris";
-
-    }
+    header("location:index.php");
 }
-?>
 
-<a href="index.php"> Retour à accueil </a><br />
+}
+header("location:index.php");
+?>
