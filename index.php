@@ -17,14 +17,14 @@ if(isset($_SESSION['user']) && !empty($_SESSION['user'])){
 </br/>
 
     <a href="deconnexion.php"> Se déconnecter </a><br />
-    <a href="unsuscribe.php"> Se désinscrire </a>
+    <a href="unsuscribe.php"> Se désinscrire </a><br />
 
     <?php
     if(isset($_POST['content']) && !empty($_POST['content'])){
         $content = htmlspecialchars($_POST['content']);
 
         $poster = $_SESSION['user'];
-        var_dump($poster);
+        //var_dump($poster);
 
         if($content){
             $q = $pdo->prepare('SELECT * FROM user WHERE nickname = :nickname');
@@ -32,15 +32,28 @@ if(isset($_SESSION['user']) && !empty($_SESSION['user'])){
             $q->execute();
             $queryResults = $q->fetch(PDO::FETCH_ASSOC);
             //var_dump($queryResults);
-            if(!empty($queryResults['id'])){
+
+            if(!empty($queryResults['id']) && !empty($queryResults['nickname']) ){
 
                 $user_id = $queryResults['id'];
-                var_dump($user_id);
+                $user_nickname = $queryResults['nickname'];
+                //var_dump($user_id);
 
-                $q = $pdo->prepare('INSERT INTO post (user_id, content) VALUES (:user_id, :content)');
-                $q->bindParam(':user_id', $user_id);
-                $q->bindParam(':content', $content, PDO::PARAM_STR);
-                $q->execute();
+                $post = $pdo->prepare('INSERT INTO post (user_id, nickname_user, content) VALUES (:user_id, :nickname_user, :content)');
+                $post->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+                $post->bindParam(':nickname_user', $user_nickname, PDO::PARAM_STR);
+                $post->bindParam(':content', $content, PDO::PARAM_STR);
+                $post->execute();
+
+                $display = $pdo->prepare('SELECT * FROM post');
+                $display->execute();
+                $displayResults = $display->fetchAll();
+                foreach($displayResults as $result) {
+                    echo $result['user_id'] ." - ";
+                    echo $result['nickname_user'] ." - ";
+                    echo $result['content'], '<br>';
+                    }
+
             }
 
         }
