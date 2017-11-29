@@ -110,5 +110,14 @@ if(isset($_POST['nickname_register']) && !empty($_POST['nickname_register']) && 
          $_SESSION['user'] = $nickname_register;
      }
     }
+
+    $display = $pdo->prepare('SELECT * FROM post');
+    $display->execute();
+    $displayResults = $display->fetchAll();
+    foreach($displayResults as $result) {
+        echo $result['user_id'] ." - ";
+        echo $result['nickname_user'] ." - ";
+        echo $result['content'], '<br>';
+        }
 }
 ?>
