@@ -6,30 +6,38 @@ echo "<h1> BulletProof </h1>";
 session_start();
 
 if(isset($_SESSION['user']) && !empty($_SESSION['user'])){
-?>
-    <a href="Logout.php"> Se déconnecter </a>
+    echo "Bienvenue ".($_SESSION['user']);
 
+?>
     <form method="POST"
     <label>Message: <textarea cols="80" rows="8" name="content"></textarea></label><br/>
     <input type="submit" value="Envoyer"/>
-    </form>
+</form><br/>
+
+</br/>
+
+    <a href="deconnexion.php"> Se déconnecter </a><br />
+    <a href="unsuscribe.php"> Se désinscrire </a>
 
     <?php
     if(isset($_POST['content']) && !empty($_POST['content'])){
         $content = htmlspecialchars($_POST['content']);
 
         $poster = $_SESSION['user'];
+        var_dump($poster);
 
         if($content){
             $q = $pdo->prepare('SELECT * FROM user WHERE nickname = :nickname');
             $q->bindParam(':nickname', $poster, PDO::PARAM_STR);
             $q->execute();
             $queryResults = $q->fetch(PDO::FETCH_ASSOC);
-            if($queryResults['id']){
+            //var_dump($queryResults);
+            if(!empty($queryResults['id'])){
 
                 $user_id = $queryResults['id'];
+                var_dump($user_id);
 
-                $q = $pdo->prepare('INSERT INTO user (user_id, content) VALUES (:user_id, :content)');
+                $q = $pdo->prepare('INSERT INTO post (user_id, content) VALUES (:user_id, :content)');
                 $q->bindParam(':user_id', $user_id);
                 $q->bindParam(':content', $content, PDO::PARAM_STR);
                 $q->execute();
