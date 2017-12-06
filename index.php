@@ -5,7 +5,7 @@ echo "<h1> BulletProof </h1>";
 
 session_start();
 
-if(isset($_SESSION['user']) && !empty($_SESSION['user'])){
+if(isset($_SESSION['user'])){
     echo "Bienvenue ".($_SESSION['user']);
 
 ?>
@@ -22,7 +22,9 @@ if(isset($_SESSION['user']) && !empty($_SESSION['user'])){
     <?php
     if(isset($_POST['content']) && !empty($_POST['content'])){
         $content = htmlspecialchars($_POST['content']);
-
+        $content = htmlentities($content);
+        $content = strip_tags($content);
+        $content = trim($content);
         $poster = $_SESSION['user'];
         //var_dump($poster);
 
@@ -73,8 +75,14 @@ if(isset($_SESSION['user']) && !empty($_SESSION['user'])){
 <?php
 if(isset($_POST['nickname_login']) && !empty($_POST['nickname_login']) && isset($_POST['password_login']) && !empty($_POST['password_login'])){
     $nickname_login = htmlspecialchars($_POST['nickname_login']);
+    $nickname_login = htmlentities($nickname_login);
+    $nickname_login = strip_tags($nickname_login);
+    $nickname_login = trim($nickname_login);
+
     $password_login = htmlspecialchars($_POST['password_login']);
-    $password_hash = password_hash($password_login, PASSWORD_DEFAULT);
+    $password_login = htmlentities($password_login);
+    $password_login = strip_tags($password_login);
+    $password_login = trim($password_login);
 
     $q = $pdo->prepare('SELECT * FROM user WHERE nickname = :nickname');
     $q->bindParam(':nickname', $nickname_login, PDO::PARAM_STR);
@@ -89,7 +97,6 @@ if(isset($_POST['nickname_login']) && !empty($_POST['nickname_login']) && isset(
 }
 ?>
 
-
 <form method="POST" action="index.php">
 <label>Pseudo: <input type="text" name="nickname_register"/></label><br/>
 <label>Mot de passe: <input type="password" name="password_register"/></label><br/>
@@ -99,7 +106,15 @@ if(isset($_POST['nickname_login']) && !empty($_POST['nickname_login']) && isset(
 <?php
 if(isset($_POST['nickname_register']) && !empty($_POST['nickname_register']) && isset($_POST['password_register']) && !empty($_POST['password_register'])){
     $nickname_register = htmlspecialchars($_POST['nickname_register']);
+    $nickname_register = htmlentities($nickname_register);
+    $nickname_register = strip_tags($nickname_register);
+    $nickname_register = trim($nickname_register);
+
     $password_register = htmlspecialchars($_POST['password_register']);
+    $password_register = htmlentities($password_register);
+    $password_register = strip_tags($password_register);
+    $password_register = trim($password_register);
+
     $password_hash = password_hash($password_register, PASSWORD_DEFAULT);
 
     $q = $pdo->prepare('INSERT INTO user (nickname, password) VALUES (:nickname, :password)');
