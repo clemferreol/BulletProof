@@ -1,6 +1,6 @@
-#Install
+#BulletProof
 ***
-**Create_Sql_Table**
+**Installation**
 
 Import table sql from post.sql and user.sql (utils directory)
 
