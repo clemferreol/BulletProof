@@ -47,22 +47,20 @@ if(isset($_SESSION['user'])){
                 $post->bindParam(':content', $content, PDO::PARAM_STR);
                 $post->execute();
 
-                $display = $pdo->prepare('SELECT * FROM post');
-                $display->execute();
-                $displayResults = $display->fetchAll();
-                foreach($displayResults as $result) {
-                    echo $result['user_id'] ." - ";
-                    echo $result['nickname_user'] ." - ";
-                    echo $result['content'], '<br>';
-                    }
-
             }
 
         }
-
     }
-    ?>
-<?php
+
+    $display = $pdo->prepare('SELECT * FROM post');
+    $display->execute();
+    $displayResults = $display->fetchAll();
+    foreach($displayResults as $result) {
+        echo $result['user_id'] ." - ";
+        echo $result['nickname_user'] ." - ";
+        echo $result['content'], '<br>';
+        }
+
 }else{
  ?>
 
@@ -123,6 +121,9 @@ if(isset($_POST['nickname_register']) && !empty($_POST['nickname_register']) && 
     $register = $q->execute();
     if($register){
          $_SESSION['user'] = $nickname_register;
+         echo "Vous êtes bien inscris";
+     }else{
+         echo "Une erreur s'est produite";
      }
     }
 
